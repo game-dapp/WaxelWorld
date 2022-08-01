@@ -7,3 +7,5 @@
 ## waxel-world
 Repository for the P2E game Waxel World
 unity version: 2020.3.29f1
+##
+https://waxel.net/play/
