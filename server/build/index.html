@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="application/wasm; charset=utf-8">
+    <title>Unity WebGL Player | Waxel World</title>
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
+    <script src="waxjs.js"></script>
+    <script src="controller.js"></script>
+    <script src="atomicassets.js"></script>
+    <script src="https://unpkg.com/anchor-link@3"></script>
+    <script src="https://unpkg.com/anchor-link-browser-transport@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/eosjs-account-name@2.2.1/lib/index.js" id="id-sc-include-js"></script>
+  </head>
+  <body>
+    <div id="unity-container" class="unity-desktop">
+      <canvas id="unity-canvas" width=1280 height=720></canvas>
+      <div id="unity-loading-bar">
+        <div id="unity-logo"></div>
+        <div id="unity-progress-bar-empty">
+          <div id="unity-progress-bar-full"></div>
+        </div>
+      </div>
+      <div id="unity-warning"> </div>
+      <div id="unity-footer">
+        <div id="unity-webgl-logo"></div>
+        <div id="unity-fullscreen-button"></div>
+        <div id="unity-build-title">Waxel World</div>
+      </div>
+    </div>
+    <script>
+      // logout
+      // window.addEventListener("beforeunload", function (e) {        
+      //     localStorage.clear();
+      //   return;
+      // });
+      var container = document.querySelector("#unity-container");
+      var canvas = document.querySelector("#unity-canvas");
+      var loadingBar = document.querySelector("#unity-loading-bar");
+      var progressBarFull = document.querySelector("#unity-progress-bar-full");
+      var fullscreenButton = document.querySelector("#unity-fullscreen-button");
+      var warningBanner = document.querySelector("#unity-warning");
+
+
+      var buildUrl = "Build";
+      var loaderUrl = buildUrl + "/Waxel_World.loader.js";
+      var config = {
+        dataUrl: buildUrl + "/Waxel_World.data",
+        frameworkUrl: buildUrl + "/Waxel_World.framework.js",
+        codeUrl: buildUrl + "/Waxel_World.wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "Waxel",
+        productName: "Waxel World (alpha)",
+        productVersion: "0.1",
+      };
+
+      // By default Unity keeps WebGL canvas render target size matched with
+      // the DOM size of the canvas element (scaled by window.devicePixelRatio)
+      // Set this to false if you want to decouple this synchronization from
+      // happening inside the engine, and you would instead like to size up
+      // the canvas DOM size and WebGL render target sizes yourself.
+      // config.matchWebGLToCanvasSize = false;
+
+      // if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+      //   container.className = "unity-mobile";
+      //   // Avoid draining fillrate performance on mobile devices,
+      //   // and default/override low DPI mode on mobile browsers.
+      //   config.devicePixelRatio = 1;
+      //   unityShowBanner('WebGL builds are not supported on mobile devices.');
+      // } else {
+        canvas.style.width = "1280px";
+        canvas.style.height = "720px";
+      // }
+      loadingBar.style.display = "block";
+
+      var script = document.createElement("script");
+      script.src = loaderUrl;
+      var unityInstance = null;
+      script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+          progressBarFull.style.width = 100 * progress + "%";
+        }).then((unityinstance) => {
+          unityInstance = unityinstance;
+          loadingBar.style.display = "none";
+          fullscreenButton.onclick = () => {
+            unityinstance.SetFullscreen(1);
+          };
+        }).catch((message) => {
+          alert(message);
+        });
+      };
+      document.body.appendChild(script);
+    </script>
+    
+  </body>
+</html>
