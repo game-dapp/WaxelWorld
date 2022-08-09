@@ -314,7 +314,9 @@ async function getNinjaData() {
   try {
 
     let assets = getAssets("laxewnefty");
+    console.log('getNinjaData')
     assetData = await assets;
+    console.log(assetData)
 
     var ninja_data = [];
     const arr = Object.values(assetData);
@@ -508,6 +510,8 @@ const checkAssetIds = async (table) => {
     });
     const body = await response.json();
     const arr = Object.values(body.rows);
+    console.log(arr)
+    console.log('here is contrat data of ' + table)
     const ids = [];
     const table_data = [];
     if (arr.length != 0) {
@@ -1102,6 +1106,9 @@ async function registernft(assetid, race) {
 async function getNinjaD() {
   try {
     let ninjadata = await getNinjaData();
+    console.log(`ninjadata`)
+
+    console.log(ninjadata)
     unityInstance.SendMessage(
       "GameController",
       "Client_SetNinjaData",
